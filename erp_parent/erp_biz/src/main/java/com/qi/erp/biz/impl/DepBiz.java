@@ -28,7 +28,6 @@ public class DepBiz implements IDepBiz {
 	/**
 	 * 新增部门
 	 */
-	@Override
 	public void add(Dep dep) {
 		depDao.add(dep);
 	}

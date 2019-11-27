@@ -1,12 +1,10 @@
 package com.qi.erp.action;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.StyledEditorKit.BoldAction;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -192,7 +190,6 @@ public class DepAction {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void ajaxReturn(boolean success, String message) {
 		// 返回前端的JSon数据
 		Map<String, Object> rtn = new HashMap<String, Object>();

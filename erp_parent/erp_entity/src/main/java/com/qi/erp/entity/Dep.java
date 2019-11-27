@@ -1,13 +1,11 @@
 package com.qi.erp.entity;
 
-import java.io.Serializable;
-
 /**
  * @author dlq96
  * 部门实体类
  *
  */
-public class Dep implements Serializable{
+public class Dep {
 	private Long uuid;//部门编号
 	private String name;//部门名称
 	private String tele;//部门电话

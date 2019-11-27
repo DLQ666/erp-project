@@ -20,7 +20,7 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	/**
 	 *查询所有部门信息
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<Dep> getList() {
 		return (List<Dep>) this.getHibernateTemplate().find("from Dep");
 	}
@@ -28,6 +28,7 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	/**
 	 *条件查询
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Dep> getList(Dep dep1, Dep dep2, Object param, int firstResult, int maxResults) {
 		DetachedCriteria dc= getDetachedCriteria(dep1);
 		return (List<Dep>) getHibernateTemplate().findByCriteria(dc, firstResult, maxResults);
@@ -36,7 +37,6 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	/**
 	 *新增部门
 	 */
-	@Override
 	public void add(Dep dep) {
 		this.getHibernateTemplate().save(dep);
 	}
@@ -44,7 +44,6 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	/**
 	 *删除部门
 	 */
-	@Override
 	public void delete(Long uuid) {
 		//让对象进入持久化状态
 		Dep dep = this.getHibernateTemplate().get(Dep.class, uuid);
@@ -71,11 +70,10 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	/**
 	 *记录条件查询的总记录数
 	 */
-	@Override
 	public long getCount(Dep dep1, Dep dep2, Object param) {
 		DetachedCriteria dc= getDetachedCriteria(dep1);
 		dc.setProjection(Projections.rowCount());
-		return (long)getHibernateTemplate().findByCriteria(dc).get(0);
+		return (long) getHibernateTemplate().findByCriteria(dc).get(0);
 	}
 	
 	private DetachedCriteria getDetachedCriteria(Dep dep1) {
