@@ -10,13 +10,20 @@
 <script type="text/javascript" src="ui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
 <script type="text/javascript">
+	var method = "";
 	$(function() {
 		$('#grid').datagrid({    
 		    url:'dep_getList',    
 		    columns:[[    
 		    	{field:'uuid',title:'部门编号',width:100},
 				{field:'name',title:'部门名称',width:100},
-				{field:'tele',title:'部门电话',width:100}
+				{field:'tele',title:'部门联系电话',width:100,align: 'right'},
+				{field:'-',title:'操作',formatter: function(value,row,index){
+					var oper = '<a style="text-decoration:none; color: #00FF00" href="javascript:void(0)" onclick="edit(' + row.uuid + ')">修改</a> ';
+					oper += ' <a style="text-decoration:none; color: #FF3333" href="javascript:void(0)" onclick="del(' + row.uuid + ')">删除</a>';
+					return oper;
+				}}
+				
 		    ]],
 		    pagination:true,
 		    singleSelect:true,
@@ -24,6 +31,9 @@
 		    	text:'新增',
 				iconCls: 'icon-add',
 				handler: function(){
+					method = "add";
+					//添加完事后清空当前表单数据，下次添加时不会出现之前添加过的表单数据
+					$('#editForm').form('clear');
 					$('#editDlg').dialog('open');
 				}
 			}]
@@ -35,6 +45,11 @@
 			//json.stringify用于将json对象转换为json字符串
 			//alert(JSON.stringify(formData));
 			$('#grid').datagrid('load',formData);
+		});
+		$('#btnSearchClear').bind('click',function() {
+				$('#searchForm').form('clear');
+				var formData=$('#searchForm').serializeJSON();
+				$('#grid').datagrid('load',formData);
 		});
 		
 		$('#editDlg').dialog({    
@@ -48,7 +63,7 @@
 		$('#btnSave').bind('click',function() {
 			var formData = $('#editForm').serializeJSON();
 			$.ajax({
-				url: 'dep_add',
+				url: 'dep_' + method,
 				data: formData,
 				dataType: 'json',
 				type: 'post',
@@ -63,8 +78,38 @@
 			})
 		})
 	});
-	
+	function del(uuid) {
+		$.messager.confirm('确认', '确认要删除吗？', function(ok){
+			if (ok){
+				$.ajax({
+					url: 'dep_delete?id=' + uuid,
+					dataType: 'json',
+					type: 'post',
+					success: function(rtn){
+						$.messager.alert("提示",rtn.message,'info',function(){
+							//刷新表格数据
+							$('#grid').datagrid('reload');
+						});
+					}
+				})
+			    // 退出操作;
+			}
+		});
 
+
+	}
+/**
+ * 修改部门
+ */
+ function edit(uuid){
+	//弹出窗口
+	$('#editDlg').dialog('open');
+	//清空表单内容
+	$('#editForm').form('clear');
+	method = "update";
+	//加载数据
+	 $('#editForm').form('load','dep_get?id=' + uuid);
+}
 </script>
 </head>
 
@@ -80,6 +125,7 @@
 					<td><input name="dep1.tele"></td>
 					<td>
 						<button id="btnSearch" type="button">查询</button>
+						<button id="btnSearchClear" type="button">清空查询</button>
 					</td>
 				</tr>
 			</table>
@@ -92,7 +138,7 @@
 			<table>
 				<tr>
 					<td>部门名称</td>
-					<td><input name="dep.name"></td>
+					<td><input name="dep.name"><input type="hidden" name="dep.uuid" /></td>
 				</tr>
 				<tr>
 					<td>部门电话</td>

@@ -23,6 +23,18 @@ public interface IDepBiz {
 	public void add(Dep dep);
 	
 	/**
+	 *删除部门
+	 */
+	public void delete(Long uuid);
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	public Dep get(Long uuid);
+	
+	/**
 	 * 分页
 	 * @param dep1
 	 * @return
@@ -35,4 +47,9 @@ public interface IDepBiz {
 	 * @return
 	 */
 	public long getCount(Dep dep1, Dep dep2, Object param);
+	
+	/**
+	 * 更新部门数据
+	 */
+	public void update(Dep dep);
 }

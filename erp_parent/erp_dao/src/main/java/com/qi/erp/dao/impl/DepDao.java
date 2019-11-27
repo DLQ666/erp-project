@@ -34,12 +34,40 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	}
 	
 	/**
-	 *新增
+	 *新增部门
 	 */
 	@Override
 	public void add(Dep dep) {
 		this.getHibernateTemplate().save(dep);
 	}
+	
+	/**
+	 *删除部门
+	 */
+	@Override
+	public void delete(Long uuid) {
+		//让对象进入持久化状态
+		Dep dep = this.getHibernateTemplate().get(Dep.class, uuid);
+		//删除持久化状态
+		this.getHibernateTemplate().delete(dep);
+	}
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	public Dep get(Long uuid) {
+		return getHibernateTemplate().get(Dep.class, uuid);
+	}
+	
+	/**
+	 *更新数据
+	 */
+	public void update(Dep dep) {
+		this.getHibernateTemplate().update(dep);
+	}
+	
 	/**
 	 *记录条件查询的总记录数
 	 */
@@ -64,5 +92,6 @@ public class DepDao extends HibernateDaoSupport implements IDepDao {
 	}
 
 	
+
 
 }

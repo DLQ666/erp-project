@@ -11,7 +11,7 @@ import com.qi.erp.entity.Dep;
 public interface IDepDao {
 	
 	/**
-	 * 查询全部列表
+	 * 查询部门全部列表
 	 * @return
 	 */
 	
@@ -31,9 +31,28 @@ public interface IDepDao {
 	public long getCount(Dep dep1, Dep dep2, Object param);
 	
 	/**
-	 * 新增
+	 * 新增部门
 	 * @param dep
 	 */
 	public void add(Dep dep);
+	
+	
+	/**
+	 * 删除部门
+	 * @param uuid
+	 */
+	public void delete(Long uuid);
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	public Dep get(Long uuid);
+	
+	/**
+	 * 更新部门数据
+	 */
+	public void update(Dep dep);
 
 }

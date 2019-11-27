@@ -26,13 +26,35 @@ public class DepBiz implements IDepBiz {
 	}
 	
 	/**
-	 * 新增
+	 * 新增部门
 	 */
 	@Override
 	public void add(Dep dep) {
 		depDao.add(dep);
 	}
-
+	
+	/**
+	 *删除部门
+	 */
+	public void delete(Long uuid) {
+		depDao.delete(uuid);
+		
+	}
+	
+	/**
+	 * 通过编号查询对象
+	 * @param uuid
+	 * @return
+	 */
+	public Dep get(Long uuid) {
+		return depDao.get(uuid);
+	}
+	/**
+	 * 更新部门数据
+	 */
+	public void update(Dep dep) {
+		depDao.update(dep);
+	}
 	/**
 	 * 分页
 	 * @param dep1
@@ -41,10 +63,18 @@ public class DepBiz implements IDepBiz {
 		return depDao.getList(dep1, dep2, param, firstResult, maxResults);
 	}
 
-	@Override
+	/**
+	 *获取总记录数
+	 */
 	public long getCount(Dep dep1, Dep dep2, Object param) {
 		return depDao.getCount(dep1,dep2,param);
 	}
+
+	
+
+	
+
+	
 
 	
 }

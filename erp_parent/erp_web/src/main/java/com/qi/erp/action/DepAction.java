@@ -1,10 +1,12 @@
 package com.qi.erp.action;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -116,7 +118,55 @@ public class DepAction {
 		}
 		write(JSON.toJSONString(rtn));
 	}
+	
+	/**
+	 * 删除部门
+	 * @param uuid
+	 */
+	private long id;
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 
+	public void delete() {
+		try {
+			depBiz.delete(id);
+			ajaxReturn(true, "删除成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ajaxReturn(false, "删除失败");
+		}
+	}
+
+	/**
+	 * 通过编号查询部门对象
+	 */
+	public void get() {
+		Dep dep = depBiz.get(id);
+		String jsonString = JSON.toJSONString(dep);
+		//{"name":"党支部","tele":"555","uuid":34}
+		System.out.println("转换前" + jsonString);
+		String jsonStringAfter = mapData(jsonString, "dep");
+		System.out.println("转换后" + jsonStringAfter);
+		write(jsonStringAfter);
+	}
+	
+	/**
+	 * 修改数据
+	 */
+	public void update() {
+		try {
+			depBiz.update(dep);
+			ajaxReturn(true, "修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ajaxReturn(false, "修改失败");
+		}
+	}
+	
 	/**
 	 * 条件查询
 	 */
@@ -141,5 +191,30 @@ public class DepAction {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@SuppressWarnings("unused")
+	private void ajaxReturn(boolean success, String message) {
+		// 返回前端的JSon数据
+		Map<String, Object> rtn = new HashMap<String, Object>();
+		rtn.put("success", success);
+		rtn.put("message", message);
+		write(JSON.toJSONString(rtn));
+	}
+	
+	/**
+	 * //{"name":"党支部","tele":"555","uuid":34}
+	 * @param jsonString JSON数据字符串
+	 * @param prefix  要加上的前缀
+	 * @return {"dep.name":"党支部","dep.tele":"555","dep.uuid":34}
+	 */
+	public String mapData(String jsonString, String prefix) {
+		Map<String, Object> map = JSON.parseObject(jsonString);
+		//存储加上前缀后key的值
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		//给每个key值加上前缀
+		for(String key : map.keySet()) {
+			dataMap.put(prefix + "." + key, map.get(key));
+		}
+		return JSON.toJSONString(dataMap);
+	}
 }
